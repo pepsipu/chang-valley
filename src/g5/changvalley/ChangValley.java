@@ -9,40 +9,42 @@ import static org.lwjgl.glfw.GLFW.*;
 // evan chang for president 2024
 public class ChangValley {
     // need 2 make this volatile bc spin waiting is non sequential
-    private static volatile boolean running = true;
+    private static boolean running = true;
     // 60 updates a second is good
-    private static final float INTERVAL = 1f / 60f;
+    protected static final double INTERVAL = 1d / 60d;
 
-    public static void construct() {
+    private static void construct() {
         // this should definitely be handled better, but for now glfw can just yell at us in stderr
         glfwSetErrorCallback(GLFWErrorCallback.createPrint(System.err));
         if (!glfwInit()) {
             throw new IllegalStateException("glfw brokey");
         };
-        System.out.println(Window.window);
     }
 
     // game loop. i like to keep everything event based but its good to have a loop to just start/stop coroutines if we
     // need to lol
-    public static void loop() {
+    private static void loop() {
         double accumulator = 0;
         // user & external input, update state, render scene cycle
-        while (running) {
+        while (running && !glfwWindowShouldClose(Window.window)) {
             // collect input here
 
             // fixed timestep updates here
             accumulator += Timer.getDelta();
             while (accumulator >= INTERVAL) {
-                // do 1 / interval updates here
+                // do interval updates here
                 accumulator -= INTERVAL;
             }
 
             // render here
 
-            // imma just give the cpu a heads up that this is a busy loop and should save its thread resources
-            // it conserves way more resources than sleeping from what i tested lmao
-            Thread.onSpinWait();
+            Timer.sync();
+            System.out.println(accumulator);
         }
+    }
+
+    private static void sync() {
+
     }
 
     public static void main(String[] args) {

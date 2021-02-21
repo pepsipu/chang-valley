@@ -2,10 +2,17 @@ package g5.changvalley;
 
 // bad style but
 // *dont* *care*
+import org.lwjgl.system.MemoryStack;
+
+import java.nio.FloatBuffer;
+
 import static org.lwjgl.glfw.GLFW.*;
+import static org.lwjgl.opengl.GL32.*;
 
 public class Window {
     static long window;
+    static long width;
+    static long height;
     static {
         glfwDefaultWindowHints();
         // im going to use glfw 3.2. i have no other justification besides its what im familiar with
@@ -18,5 +25,14 @@ public class Window {
         if (window == 0) {
             throw new RuntimeException("could not make window :(");
         }
+
+        glfwSetFramebufferSizeCallback(window, (window, width, height) -> {
+            Window.width = width;
+            Window.height = height;
+        });
+    }
+
+    protected boolean isPressed(int keyCode) {
+        return glfwGetKey(window, keyCode) == GLFW_PRESS;
     }
 }

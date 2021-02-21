@@ -6,15 +6,25 @@ import org.lwjgl.glfw.GLFW;
 public class Timer {
     private static double lastTime = 0;
 
-    public static double getTime() {
+    protected static double getTime() {
         // glfw has an ok timer?? i think?? seems more accurate than javas lol
         return GLFW.glfwGetTime();
     }
 
-    public static double getDelta() {
+    protected static double getDelta() {
         double time = getTime();
         double delta = time - lastTime;
         lastTime = time;
         return delta;
     }
+
+    // wait until frame should complete
+    protected static void sync() {
+        double wait =  lastTime + ChangValley.INTERVAL;
+        while (getTime() < wait) {
+            // spin waiting is a lot better than time stepping 1ms or busy waiting
+            Thread.onSpinWait();
+        }
+    }
+
 }
