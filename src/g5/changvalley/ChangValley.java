@@ -28,23 +28,21 @@ public class ChangValley {
         // user & external input, update state, render scene cycle
         while (running && !glfwWindowShouldClose(Window.window)) {
             // collect input here
+            Engine.takeInput();
 
             // fixed timestep updates here
             accumulator += Timer.getDelta();
             while (accumulator >= INTERVAL) {
                 // do interval updates here
+                Engine.updateState();
                 accumulator -= INTERVAL;
             }
 
             // render here
-
+            Engine.render();
+            glfwWaitEvents();
             Timer.sync();
-            System.out.println(accumulator);
         }
-    }
-
-    private static void sync() {
-
     }
 
     public static void main(String[] args) {

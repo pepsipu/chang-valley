@@ -2,6 +2,7 @@ package g5.changvalley;
 
 // bad style but
 // *dont* *care*
+import org.lwjgl.opengl.GL;
 import org.lwjgl.system.MemoryStack;
 
 import java.nio.FloatBuffer;
@@ -26,13 +27,21 @@ public class Window {
             throw new RuntimeException("could not make window :(");
         }
 
+        // for window context
+        glfwMakeContextCurrent(window);
+        GL.createCapabilities();
+
         glfwSetFramebufferSizeCallback(window, (window, width, height) -> {
             Window.width = width;
             Window.height = height;
         });
     }
 
-    protected boolean isPressed(int keyCode) {
+    protected static boolean isPressed(int keyCode) {
         return glfwGetKey(window, keyCode) == GLFW_PRESS;
+    }
+
+    protected static void setClearColor(float red, float green, float blue) {
+        glClearColor(red, green, blue, 0);
     }
 }
