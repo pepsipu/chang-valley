@@ -5,25 +5,21 @@ package g5.changvalley;
 
 import org.lwjgl.opengl.GL;
 
-import org.lwjgl.system.MemoryStack;
-
-import java.nio.FloatBuffer;
-
 import static org.lwjgl.glfw.Callbacks.*;
 import static org.lwjgl.glfw.GLFW.*;
-import static org.lwjgl.opengl.GL32.*;
+import static org.lwjgl.opengl.GL33.*;
 
 public class Window {
     // no reason the window should be modified after creation
-    private static final long window;
+    private static long window;
     private static long width;
     private static long height;
 
-    static {
+    public static void construct() {
         glfwDefaultWindowHints();
-        // im going to use glfw 3.2. no justification besides its the most familiar, forgive me mr reid sensei
+        // im going to use glfw 3.3. no justification besides its the most familiar, forgive me mr reid sensei
         glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-        glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 2);
+        glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
         glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
         glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GLFW_TRUE);
         window = glfwCreateWindow(500, 500, "Chang Valley", 0, 0);

@@ -1,7 +1,6 @@
 package g5.changvalley;
 
 import static org.lwjgl.glfw.GLFW.*;
-import static org.lwjgl.opengl.GL32.*;
 
 public class Engine {
     private static int direction = 0;

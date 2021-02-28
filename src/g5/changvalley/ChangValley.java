@@ -5,8 +5,6 @@ import org.lwjgl.glfw.GLFWErrorCallback;
 
 import java.util.Objects;
 
-import static org.lwjgl.opengl.GL32.*;
-
 import static org.lwjgl.glfw.GLFW.*;
 
 // main game class, run constructors, run the game loop, run destructors cuz memory leaks L
@@ -15,7 +13,7 @@ public class ChangValley {
     // need 2 make this volatile bc spin waiting is non sequential
     private static boolean running = true;
     // 60 updates a second is good
-    protected static final double INTERVAL = 1d / 60d;
+    public static final double INTERVAL = 1d / 60d;
 
     private static void construct() {
         // this should definitely be handled better, but for now glfw can just yell at us in stderr
@@ -23,11 +21,14 @@ public class ChangValley {
         if (!glfwInit()) {
             throw new IllegalStateException("glfw brokey");
         }
+        Window.construct();
+        ShaderManager.construct();
     }
 
     private static void destruct() {
         // kill window
         Window.destruct();
+        ShaderManager.destruct();
         glfwTerminate();
 
         // freeing the err callback should *never* cause a npe, but dont want errs coming from lwjgl codebase

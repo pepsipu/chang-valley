@@ -1,7 +1,7 @@
 package g5.changvalley;
 
 import static org.lwjgl.glfw.GLFW.*;
-import static org.lwjgl.opengl.GL32.*;
+import static org.lwjgl.opengl.GL33.*;
 
 public class Renderer {
     public static void clear() {
