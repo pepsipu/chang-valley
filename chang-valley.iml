@@ -10,5 +10,6 @@
     <orderEntry type="library" name="lwjgl-javadoc" level="project" />
     <orderEntry type="library" name="lwjgl-glfw-javadoc" level="project" />
     <orderEntry type="library" name="lwjgl-opengl" level="project" />
+    <orderEntry type="library" name="lwjgl" level="project" />
   </component>
 </module>

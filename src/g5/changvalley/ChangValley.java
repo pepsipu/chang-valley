@@ -23,7 +23,6 @@ public class ChangValley {
         if (!glfwInit()) {
             throw new IllegalStateException("glfw brokey");
         }
-        ;
     }
 
     private static void destruct() {
