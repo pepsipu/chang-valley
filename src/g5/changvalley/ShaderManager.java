@@ -1,6 +1,9 @@
 package g5.changvalley;
 
 import g5.changvalley.shaders.Shader;
+import org.lwjgl.system.MemoryUtil;
+
+import java.nio.FloatBuffer;
 
 import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.opengl.GL33.*;
@@ -24,7 +27,7 @@ public class ShaderManager {
     public static void link() {
         glLinkProgram(pid);
         if (glGetProgrami(pid, GL_LINK_STATUS) == 0) {
-            throw new RuntimeException("linker error " + glGetProgramInfoLog(pid, 1024));
+            throw new RuntimeException("linker error: " + glGetProgramInfoLog(pid, 1024));
         }
 
         // we can throw out our shaders after we've linked them i think lol
@@ -34,7 +37,7 @@ public class ShaderManager {
         // run validation checks to catch stupid mistakes, throw out in prod
         glValidateProgram(pid);
         if (glGetProgrami(pid, GL_VALIDATE_STATUS) == 0) {
-            System.err.println("Warning validating Shader code: " + glGetProgramInfoLog(pid, 1024));
+            System.err.println("shader code validation: " + glGetProgramInfoLog(pid, 1024));
         }
     }
 
@@ -42,5 +45,6 @@ public class ShaderManager {
         glUseProgram(0);
         glDeleteProgram(pid);
     }
+
 }
 

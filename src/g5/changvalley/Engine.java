@@ -23,10 +23,12 @@ public class Engine {
         } else if (color < 0) {
             color = 0.0f;
         }
+        Renderer.rotateTriangle();
     }
 
     public static void render() {
         Window.setClearColor(color, color, color);
         Renderer.clear();
+        Renderer.drawTriangle();
     }
 }

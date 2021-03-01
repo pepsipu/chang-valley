@@ -2,10 +2,13 @@ package g5.changvalley;
 
 import org.lwjgl.Version;
 import org.lwjgl.glfw.GLFWErrorCallback;
+import org.lwjgl.system.MemoryUtil;
 
+import java.nio.FloatBuffer;
 import java.util.Objects;
 
 import static org.lwjgl.glfw.GLFW.*;
+import static org.lwjgl.opengl.GL33.*;
 
 // main game class, run constructors, run the game loop, run destructors cuz memory leaks L
 // evan chang for president 2024
@@ -21,8 +24,11 @@ public class ChangValley {
         if (!glfwInit()) {
             throw new IllegalStateException("glfw brokey");
         }
+        // we can make these static blocks, but i prefer a more explicit and pragmatic construction/destruction
+        // so we can control when we want to setup the window VS just in time construction
         Window.construct();
         ShaderManager.construct();
+        Renderer.construct();
     }
 
     private static void destruct() {
@@ -39,6 +45,7 @@ public class ChangValley {
 
     // game loop, following the fixed timestep game loop paradigm
     private static void loop() {
+
         double accumulator = 0;
         // user & external input, update state, render scene cycle
         while (running && !Window.shouldClose()) {
@@ -58,8 +65,7 @@ public class ChangValley {
             Engine.render();
             // swap display buffers to show the scene
             Window.bufferSwap();
-
-            glfwWaitEvents();
+            glfwPollEvents();
             Timer.sync();
         }
     }
