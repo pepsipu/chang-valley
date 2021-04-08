@@ -1,13 +1,12 @@
-package g5.changvalley;
+package g5.changvalley.render;
 
-import g5.changvalley.shaders.Shader;
-import org.lwjgl.system.MemoryUtil;
+import g5.changvalley.Utils;
+import g5.changvalley.render.shader.Shader;
 
-import java.nio.FloatBuffer;
-
-import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.opengl.GL33.*;
 
+// holy this was actually such a pain in the ass idk anything about shaders
+// mr reid please give me an A+ :sob:
 public class ShaderManager {
     private static int pid;
     private static Shader vertexShader;
@@ -17,8 +16,8 @@ public class ShaderManager {
         if ((pid = glCreateProgram()) == 0) {
             throw new RuntimeException("could not init shader program");
         }
-        vertexShader = new Shader(Utils.loadResource("./shaders/vertex.shader"), GL_VERTEX_SHADER, pid);
-        fragmentShader = new Shader(Utils.loadResource("./shaders/fragment.shader"), GL_FRAGMENT_SHADER, pid);
+        vertexShader = new Shader(Utils.loadResource("./render/shader/vertex.shader"), GL_VERTEX_SHADER, pid);
+        fragmentShader = new Shader(Utils.loadResource("./render/shader/fragment.shader"), GL_FRAGMENT_SHADER, pid);
 
         link();
         glUseProgram(pid);
@@ -34,7 +33,7 @@ public class ShaderManager {
         vertexShader.detach();
         fragmentShader.detach();
 
-        // run validation checks to catch stupid mistakes, throw out in prod
+        // run validation checks to catch stupid mistakes, throw out in production
         glValidateProgram(pid);
         if (glGetProgrami(pid, GL_VALIDATE_STATUS) == 0) {
             System.err.println("shader code validation: " + glGetProgramInfoLog(pid, 1024));

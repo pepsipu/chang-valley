@@ -1,5 +1,8 @@
 package g5.changvalley;
 
+import g5.changvalley.render.Renderer;
+import g5.changvalley.render.mesh.Mesh;
+
 import static org.lwjgl.glfw.GLFW.*;
 
 public class Engine {
@@ -23,12 +26,10 @@ public class Engine {
         } else if (color < 0) {
             color = 0.0f;
         }
-        Renderer.rotateTriangle();
     }
 
     public static void render() {
         Window.setClearColor(color, color, color);
         Renderer.clear();
-        Renderer.drawTriangle();
     }
 }

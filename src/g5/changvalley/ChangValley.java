@@ -1,14 +1,14 @@
 package g5.changvalley;
 
+import g5.changvalley.render.Renderer;
+import g5.changvalley.render.ShaderManager;
+import g5.changvalley.render.mesh.Mesh;
 import org.lwjgl.Version;
 import org.lwjgl.glfw.GLFWErrorCallback;
-import org.lwjgl.system.MemoryUtil;
 
-import java.nio.FloatBuffer;
 import java.util.Objects;
 
 import static org.lwjgl.glfw.GLFW.*;
-import static org.lwjgl.opengl.GL33.*;
 
 // main game class, run constructors, run the game loop, run destructors cuz memory leaks L
 // evan chang for president 2024
@@ -17,6 +17,17 @@ public class ChangValley {
     private static boolean running = true;
     // 60 updates a second is good
     public static final double INTERVAL = 1d / 60d;
+    static float[] positions = new float[]{
+            -0.5f,  0.5f, 0.0f,
+            -0.5f, -0.5f, 0.0f,
+            0.5f, -0.5f, 0.0f,
+    };
+    static float[] colours = new float[]{
+            0.5f, 0.0f, 0.0f,
+            0.0f, 0.5f, 0.0f,
+            0.0f, 0.0f, 0.5f,
+    };
+    public static Mesh s;
 
     private static void construct() {
         // this should definitely be handled better, but for now glfw can just yell at us in stderr
@@ -43,9 +54,12 @@ public class ChangValley {
         System.out.println("thx for playing :D");
     }
 
+    public static void stop() {
+        running = false;
+    }
+
     // game loop, following the fixed timestep game loop paradigm
     private static void loop() {
-
         double accumulator = 0;
         // user & external input, update state, render scene cycle
         while (running && !Window.shouldClose()) {
@@ -63,9 +77,10 @@ public class ChangValley {
 
             // render here
             Engine.render();
+            Renderer.render(s);
             // swap display buffers to show the scene
             Window.bufferSwap();
-            glfwPollEvents();
+            Window.pollEvents();
             Timer.sync();
         }
     }
@@ -75,6 +90,7 @@ public class ChangValley {
         System.out.println("LWJGL version: " + Version.getVersion());
         // construct, loop, destruct
         construct();
+        s = new Mesh(positions, colours);
         loop();
         destruct();
     }

@@ -2,7 +2,7 @@ package g5.changvalley;
 
 import org.lwjgl.glfw.GLFW;
 
-// suuuper basic timer, but to keep fixed timestep loops we need to get the time delta
+// suuuper basic timer, but to keep fixed time step loops we need to get the time delta
 public class Timer {
     private static double lastTime = 0;
 

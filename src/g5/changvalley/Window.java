@@ -54,9 +54,15 @@ public class Window {
         glClearColor(red, green, blue, 0);
     }
 
-    // buffer swapping for v-sync
+    // buffer swapping for v-sync, tbh tests show this doesnt change much since our application is pretty light
+    // but might prevent screen tearing further on when we add more features? idk idt we're even scored on
+    // performance lol
     public static void bufferSwap() {
         glfwSwapBuffers(window);
+    }
+
+    public static void pollEvents() {
+        glfwPollEvents();
     }
 
     public static void destruct() {

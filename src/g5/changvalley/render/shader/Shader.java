@@ -1,6 +1,5 @@
-package g5.changvalley.shaders;
+package g5.changvalley.render.shader;
 
-import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.opengl.GL33.*;
 
 public class Shader {
