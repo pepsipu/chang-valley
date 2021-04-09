@@ -17,16 +17,6 @@ public class ChangValley {
     private static boolean running = true;
     // 60 updates a second is good
     public static final double INTERVAL = 1d / 60d;
-    static float[] positions = new float[]{
-            -0.5f,  0.5f, 0.0f,
-            -0.5f, -0.5f, 0.0f,
-            0.5f, -0.5f, 0.0f,
-    };
-    static float[] colours = new float[]{
-            1f, 0.0f, 0.0f,
-            0.0f, 1f, 0.0f,
-            0.0f, 0.0f, 1f,
-    };
     public static Mesh s;
 
     private static void construct() {
@@ -90,7 +80,22 @@ public class ChangValley {
         System.out.println("LWJGL version: " + Version.getVersion());
         // construct, loop, destruct
         construct();
-        s = new Mesh(positions, colours);
+        float[] positions = new float[]{
+                -0.5f,  0.5f, 0.0f,
+                -0.5f, -0.5f, 0.0f,
+                0.5f, -0.5f, 0.0f,
+                0.5f,  0.5f, 0.0f,
+        };
+        float[] colours = new float[]{
+                0.5f, 0.0f, 0.0f,
+                0.0f, 0.5f, 0.0f,
+                0.0f, 0.0f, 0.5f,
+                0.0f, 0.5f, 0.5f,
+        };
+        int[] indexes = new int[]{
+                0, 1, 3, 3, 1, 2,
+        };
+        s = new Mesh(positions, colours, indexes);
         loop();
         destruct();
     }

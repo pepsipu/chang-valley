@@ -14,6 +14,7 @@ import static org.lwjgl.opengl.GL33.*;
 // instead of repeating vertices u give each vertex an index and specify the index instead of vertex. tbh sounds cool
 // but im like stupid so imma stick with my bad inefficient way of repeating vertices until further notice
 // sorry reid sama
+// UPDATE i tried to learn how to do this for fun and tbh kinda works hopefully??
 public class Mesh {
     // vertex array object id
     private final int vao = glGenVertexArrays();
@@ -21,15 +22,16 @@ public class Mesh {
     private final static int COLOR_INDEX = 1;
     private final int vertexCount;
 
-    public Mesh(float[] vertices, float[] colors) {
-        vertexCount = vertices.length / 3;
+    public Mesh(float[] vertices, float[] colors, int[] indexes) {
+        vertexCount = indexes.length;
 
         bindVertex();
 
         // attach vertex vbo to this vao
-        VertexBufferObject.attachVbo(vertices, POSITION_INDEX);
+        VertexBufferObject.attachAttributeVbo(vertices, POSITION_INDEX);
         // attach color vbo to this vao
-        VertexBufferObject.attachVbo(colors, COLOR_INDEX);
+        VertexBufferObject.attachAttributeVbo(colors, COLOR_INDEX);
+        VertexBufferObject.attachIndexVbo(indexes);
 
         Mesh.unbindVertex();
     }
@@ -43,7 +45,7 @@ public class Mesh {
     }
 
     public void draw() {
-        glDrawArrays(GL_TRIANGLES, 0, vertexCount);
+        glDrawElements(GL_TRIANGLES, vertexCount, GL_UNSIGNED_INT, 0);
     }
 
     public static void enableAttributes() {
@@ -54,9 +56,5 @@ public class Mesh {
     public static void disableAttributes() {
         glDisableVertexAttribArray(Mesh.POSITION_INDEX);
         glDisableVertexAttribArray(Mesh.COLOR_INDEX);
-    }
-
-    public int getVertexCount() {
-        return vertexCount;
     }
 }

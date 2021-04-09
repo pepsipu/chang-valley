@@ -11,12 +11,10 @@ public class Renderer {
 
     public static void render(Mesh mesh) {
         mesh.bindVertex();
-        // considering just keeping the attributes enabled? idk anything about opengl but i cant find out if
-        // this is illegal or not
         Mesh.enableAttributes();
+
         mesh.draw();
 
-        // for now we can just enable/disable
         Mesh.disableAttributes();
         Mesh.unbindVertex();
     }
