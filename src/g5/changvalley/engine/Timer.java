@@ -12,7 +12,7 @@ public class Timer {
         return GLFW.glfwGetTime();
     }
 
-    protected static double getDelta() {
+    public static double getDelta() {
         double time = getTime();
         double delta = time - lastTime;
         lastTime = time;
@@ -20,7 +20,7 @@ public class Timer {
     }
 
     // wait until frame should complete
-    protected static void sync() {
+    public static void sync() {
         double wait =  lastTime + ChangValley.INTERVAL;
         while (getTime() < wait) {
             // spin waiting is a lot better than time stepping 1ms or busy waiting
