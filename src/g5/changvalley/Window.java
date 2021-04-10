@@ -3,7 +3,11 @@ package g5.changvalley;
 // bad style but
 // *dont* *care*
 
+import org.lwjgl.glfw.GLFWVidMode;
 import org.lwjgl.opengl.GL;
+import org.lwjgl.system.MemoryStack;
+
+import java.nio.IntBuffer;
 
 import static org.lwjgl.glfw.Callbacks.*;
 import static org.lwjgl.glfw.GLFW.*;
@@ -12,8 +16,8 @@ import static org.lwjgl.opengl.GL33.*;
 public class Window {
     // no reason the window should be modified after creation
     private static long window;
-    private static long width;
-    private static long height;
+    private static float width;
+    private static float height;
 
     public static void construct() {
         glfwDefaultWindowHints();
@@ -40,6 +44,16 @@ public class Window {
             Window.width = width;
             Window.height = height;
         });
+        try (MemoryStack stack = MemoryStack.stackPush()) {
+            // bruh why doesnt lwjgl not have bindings or smth so i dont need to actually deal with ptrs myself??
+            IntBuffer pWidth = stack.mallocInt(1);
+            IntBuffer pHeight = stack.mallocInt(1);
+
+            glfwGetWindowSize(window, pWidth, pHeight);
+
+            Window.width = pWidth.get();
+            Window.height = pHeight.get();
+        }
     }
 
     public static boolean isPressed(int keyCode) {
@@ -69,5 +83,13 @@ public class Window {
         // clear our callbacks and kill the window
         glfwFreeCallbacks(window);
         glfwDestroyWindow(window);
+    }
+
+    public static float getWidth() {
+        return width;
+    }
+
+    public static float getHeight() {
+        return height;
     }
 }

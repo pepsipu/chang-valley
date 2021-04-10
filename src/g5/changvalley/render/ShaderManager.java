@@ -40,6 +40,10 @@ public class ShaderManager {
         }
     }
 
+    public static int getPid() {
+        return pid;
+    }
+
     public static void destruct() {
         glUseProgram(0);
         glDeleteProgram(pid);

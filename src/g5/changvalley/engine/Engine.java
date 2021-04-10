@@ -1,5 +1,6 @@
-package g5.changvalley;
+package g5.changvalley.engine;
 
+import g5.changvalley.Window;
 import g5.changvalley.render.Renderer;
 import g5.changvalley.render.mesh.Mesh;
 

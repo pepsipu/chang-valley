@@ -1,5 +1,7 @@
 package g5.changvalley;
 
+import g5.changvalley.engine.Engine;
+import g5.changvalley.engine.Timer;
 import g5.changvalley.render.Renderer;
 import g5.changvalley.render.ShaderManager;
 import g5.changvalley.render.mesh.Mesh;
@@ -81,10 +83,10 @@ public class ChangValley {
         // construct, loop, destruct
         construct();
         float[] positions = new float[]{
-                -0.5f,  0.5f, 0.0f,
-                -0.5f, -0.5f, 0.0f,
-                0.5f, -0.5f, 0.0f,
-                0.5f,  0.5f, 0.0f,
+                -0.5f,  0.5f, -1.05f,
+                -0.5f, -0.5f, -1.05f,
+                0.5f, -0.5f, -1.05f,
+                0.5f,  0.5f, -1.05f,
         };
         float[] colours = new float[]{
                 0.5f, 0.0f, 0.0f,

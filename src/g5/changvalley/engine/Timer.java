@@ -1,5 +1,6 @@
-package g5.changvalley;
+package g5.changvalley.engine;
 
+import g5.changvalley.ChangValley;
 import org.lwjgl.glfw.GLFW;
 
 // suuuper basic timer, but to keep fixed time step loops we need to get the time delta
