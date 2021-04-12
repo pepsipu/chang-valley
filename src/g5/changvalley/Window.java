@@ -38,7 +38,7 @@ public class Window {
         glfwShowWindow(window);
         GL.createCapabilities();
 
-        glClearColor(1.0f, 0.0f, 0.0f, 0.0f);
+        glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
 
         glfwSetFramebufferSizeCallback(window, (window, width, height) -> {
             Window.width = width;
@@ -54,6 +54,7 @@ public class Window {
             Window.width = pWidth.get();
             Window.height = pHeight.get();
         }
+        glEnable(GL_DEPTH_TEST);
     }
 
     public static boolean isPressed(int keyCode) {
