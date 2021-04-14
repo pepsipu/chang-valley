@@ -21,9 +21,20 @@ public class Uniform {
         uniforms.put(name, uid);
     }
 
+    public static void makeUniform(String name, int value) {
+        int uid = glGetUniformLocation(ShaderManager.getPid(), name);
+        glUniform1i(uid, value);
+        uniforms.put(name, uid);
+    }
+
     public static void updateUniform(String name, Matrix4f matrix) {
         updateUniformFromUid(uniforms.get(name), matrix);
     }
+
+    public static void updateUniform(String name, int value) {
+        glUniform1i(uniforms.get(name), value);
+    }
+
 
     // stack buffer should work just fine here cuz 16 bytes aint much??
     private static void updateUniformFromUid(int uid, Matrix4f matrix) {

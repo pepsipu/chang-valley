@@ -19,18 +19,20 @@ public class Mesh {
     // vertex array object id
     private final int vao = glGenVertexArrays();
     private final static int POSITION_INDEX = 0;
-    private final static int COLOR_INDEX = 1;
+    private final static int TEXTURE_INDEX = 1;
+    private final Texture texture;
     private final int vertexCount;
 
-    public Mesh(float[] vertices, float[] colors, int[] indexes) {
+    public Mesh(float[] vertices, float[] textureIndexes, int[] indexes, Texture texture) {
+        this.texture = texture;
         vertexCount = indexes.length;
 
         bindVertex();
 
         // attach vertex vbo to this vao
-        VertexBufferObject.attachAttributeVbo(vertices, POSITION_INDEX);
-        // attach color vbo to this vao
-        VertexBufferObject.attachAttributeVbo(colors, COLOR_INDEX);
+        VertexBufferObject.attachAttributeVbo(vertices, POSITION_INDEX, 3);
+        // attach texture index vbo to this vao
+        VertexBufferObject.attachAttributeVbo(textureIndexes, TEXTURE_INDEX, 2);
         VertexBufferObject.attachIndexVbo(indexes);
 
         Mesh.unbindVertex();
@@ -44,17 +46,33 @@ public class Mesh {
         glBindVertexArray(0);
     }
 
+    public void bindTexture() {
+        glActiveTexture(GL_TEXTURE0);
+        glBindTexture(GL_TEXTURE_2D, texture.getTid());
+    }
+
     public void draw() {
         glDrawElements(GL_TRIANGLES, vertexCount, GL_UNSIGNED_INT, 0);
     }
 
+    public void render() {
+        bindVertex();
+        bindTexture();
+        Mesh.enableAttributes();
+
+        draw();
+
+        Mesh.disableAttributes();
+        Mesh.unbindVertex();
+    }
+
     public static void enableAttributes() {
         glEnableVertexAttribArray(Mesh.POSITION_INDEX);
-        glEnableVertexAttribArray(Mesh.COLOR_INDEX);
+        glEnableVertexAttribArray(Mesh.TEXTURE_INDEX);
     }
 
     public static void disableAttributes() {
         glDisableVertexAttribArray(Mesh.POSITION_INDEX);
-        glDisableVertexAttribArray(Mesh.COLOR_INDEX);
+        glDisableVertexAttribArray(Mesh.TEXTURE_INDEX);
     }
 }

@@ -12,8 +12,8 @@ import static org.lwjgl.opengl.GL33.*;
 
 public class Renderer {
     private static final float FOV = (float) Math.toRadians(60);
-    private static final float Z_NEAR = 0f;
-    private static final float Z_FAR = 100f;
+    private static final float Z_NEAR = 0.01f;
+    private static final float Z_FAR = 1000f;
     private static final Matrix4f worldMatrix = new Matrix4f();
     private static final Matrix4f projectionMatrix = new Matrix4f();
 
@@ -23,23 +23,14 @@ public class Renderer {
         Uniform.makeUniform("projectionMatrix", Renderer.updateProjectionMatrix());
         // doesn't rlly matter what the world matrix starts off as so for now lets make it not change the object
         Uniform.makeUniform("worldMatrix", worldMatrix.identity());
-    }
-
-    public static void render(Mesh mesh) {
-        mesh.bindVertex();
-        Mesh.enableAttributes();
-
-        mesh.draw();
-
-        Mesh.disableAttributes();
-        Mesh.unbindVertex();
+        Uniform.makeUniform("textureSampler", 0);
     }
 
     public static void render(GameObject gameObject) {
         clear();
         Matrix4f worldMatrix = updateWorldMatrix(gameObject.getPosition(), gameObject.getRotation(), gameObject.getScale());
         Uniform.updateUniform("worldMatrix", worldMatrix);
-        Renderer.render(gameObject.getMesh());
+        gameObject.getMesh().render();
     }
 
     public static Matrix4f updateWorldMatrix(Vector3f translation, Vector3f rotation, Vector3f scale) {

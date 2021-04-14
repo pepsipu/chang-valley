@@ -8,14 +8,14 @@ import static org.lwjgl.opengl.GL33.*;
 import org.lwjgl.system.MemoryStack;
 
 public class VertexBufferObject {
-    public static void attachAttributeVbo(float[] data, int index) {
+    public static void attachAttributeVbo(float[] data, int index, int size) {
         int vbo = glGenBuffers();
         try (MemoryStack stack = MemoryStack.stackPush()) {
             FloatBuffer buffer = stack.mallocFloat(data.length);
             buffer.put(data).flip();
 
             VertexBufferObject.bind(GL_ARRAY_BUFFER, vbo);
-            VertexBufferObject.setAttribute(buffer, index);
+            VertexBufferObject.setAttribute(buffer, index, size);
         }
         VertexBufferObject.unbind();
     }
@@ -40,8 +40,8 @@ public class VertexBufferObject {
         glBindBuffer(GL_ARRAY_BUFFER, 0);
     }
 
-    private static void setAttribute(FloatBuffer buffer, int index) {
+    private static void setAttribute(FloatBuffer buffer, int index, int size) {
         glBufferData(GL_ARRAY_BUFFER, buffer, GL_STATIC_DRAW);
-        glVertexAttribPointer(index, 3, GL_FLOAT, false, 0, 0);
+        glVertexAttribPointer(index, size, GL_FLOAT, false, 0, 0);
     }
 }
