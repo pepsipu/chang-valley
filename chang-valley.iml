@@ -12,6 +12,6 @@
     <orderEntry type="library" name="lwjgl-opengl" level="project" />
     <orderEntry type="library" name="lwjgl" level="project" />
     <orderEntry type="library" name="joml-1.10.1" level="project" />
-    <orderEntry type="library" name="pngdecoder-1.0" level="project" />
+    <orderEntry type="library" name="lwjgl-stb" level="project" />
   </component>
 </module>

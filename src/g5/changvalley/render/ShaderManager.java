@@ -16,8 +16,8 @@ public class ShaderManager {
         if ((pid = glCreateProgram()) == 0) {
             throw new RuntimeException("could not init shader program");
         }
-        vertexShader = new Shader(Utils.loadResource("./render/shader/vertex.shader"), GL_VERTEX_SHADER, pid);
-        fragmentShader = new Shader(Utils.loadResource("./render/shader/fragment.shader"), GL_FRAGMENT_SHADER, pid);
+        vertexShader = new Shader(Utils.loadResource("./vertex.shader"), GL_VERTEX_SHADER, pid);
+        fragmentShader = new Shader(Utils.loadResource("./fragment.shader"), GL_FRAGMENT_SHADER, pid);
 
         link();
         glUseProgram(pid);
