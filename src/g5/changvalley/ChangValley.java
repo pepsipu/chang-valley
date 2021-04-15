@@ -130,7 +130,8 @@ public class ChangValley {
                 // V18: V1 repeated
                 -0.5f, -0.5f, 0.5f,
                 // V19: V2 repeated
-                0.5f, -0.5f, 0.5f,};
+                0.5f, -0.5f, 0.5f
+        };
         float[] textureIndexes = new float[]{
                 0.0f, 0.0f,
                 0.0f, 0.5f,
@@ -155,7 +156,8 @@ public class ChangValley {
                 0.5f, 0.0f,
                 1.0f, 0.0f,
                 0.5f, 0.5f,
-                1.0f, 0.5f,};
+                1.0f, 0.5f,
+        };
         int[] indexes = new int[]{
                 // Front face
                 0, 1, 3, 3, 1, 2,

@@ -14,7 +14,7 @@ public class Renderer {
     private static final float FOV = (float) Math.toRadians(60);
     private static final float Z_NEAR = 0.01f;
     private static final float Z_FAR = 1000f;
-    private static final Matrix4f worldMatrix = new Matrix4f();
+    private static final Matrix4f modelViewMatrix = new Matrix4f();
     private static final Matrix4f projectionMatrix = new Matrix4f();
 
 
@@ -22,24 +22,23 @@ public class Renderer {
         // make projection matrix and add it to a uniform
         Uniform.makeUniform("projectionMatrix", Renderer.updateProjectionMatrix());
         // doesn't rlly matter what the world matrix starts off as so for now lets make it not change the object
-        Uniform.makeUniform("worldMatrix", worldMatrix.identity());
+        Uniform.makeUniform("modelViewMatrix", modelViewMatrix.identity());
         Uniform.makeUniform("textureSampler", 0);
     }
 
     public static void render(GameObject gameObject) {
-        clear();
-        Matrix4f worldMatrix = updateWorldMatrix(gameObject.getPosition(), gameObject.getRotation(), gameObject.getScale());
-        Uniform.updateUniform("worldMatrix", worldMatrix);
+        Uniform.updateUniform("modelViewMatrix", updateModelViewMatrix(gameObject.getPosition(), gameObject.getRotation(), gameObject.getScale()));
         gameObject.getMesh().render();
     }
 
-    public static Matrix4f updateWorldMatrix(Vector3f translation, Vector3f rotation, Vector3f scale) {
-        return worldMatrix
-                .translation(translation)
-                .rotateX(rotation.x)
-                .rotateY(rotation.y)
-                .rotateZ(rotation.z)
-                .scale(scale);
+    public static Matrix4f updateModelViewMatrix(Vector3f translation, Vector3f rotation, Vector3f scale) {
+        return new Matrix4f(Camera.getViewMatrix())
+                .mul(modelViewMatrix
+                        .translation(translation)
+                        .rotateX(rotation.x)
+                        .rotateY(rotation.y)
+                        .rotateZ(rotation.z)
+                        .scale(scale));
     }
 
     public static Matrix4f updateProjectionMatrix() {
