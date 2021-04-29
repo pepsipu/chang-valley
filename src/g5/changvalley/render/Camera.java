@@ -27,7 +27,10 @@ public class Camera {
                 .translate(-position.x, -position.y, -position.z);
     }
 
-    public static void offset(Vector3f offset) {
+    public static void addPosition(Vector3f offset) {
         position.add(offset);
+    }
+    public static void addRotation(Vector3f offset) {
+        rotation.add(offset);
     }
 }

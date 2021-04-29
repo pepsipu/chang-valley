@@ -173,7 +173,9 @@ public class ChangValley {
                 4, 6, 7, 5, 4, 7
         };
         Texture t = new Texture("./grassblock.png");
-        s = new GameObject(new Mesh(positions, textureIndexes, indexes, t));
+        Mesh m = new Mesh(positions, positions, indexes);
+        m.setTexture(t, textureIndexes);
+        s = new GameObject(m);
         s.setPosition(0, 0, -2f);
         loop();
         destruct();

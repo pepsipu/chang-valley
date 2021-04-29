@@ -9,7 +9,7 @@ import org.joml.Vector3f;
 import static org.lwjgl.glfw.GLFW.*;
 
 public class Engine {
-    private static Vector3f cameraOffset = new Vector3f();
+    private static final Vector3f cameraOffset = new Vector3f();
     public static void takeInput() {
         cameraOffset.zero();
         if (Window.isPressed(GLFW_KEY_W)) {
@@ -30,7 +30,7 @@ public class Engine {
     }
 
     public static void updateState() {
-        Camera.offset(cameraOffset);
+        Camera.addPosition(cameraOffset);
     }
 
     public static void render() {
