@@ -4,6 +4,7 @@ import g5.changvalley.Window;
 import g5.changvalley.engine.GameObject;
 import g5.changvalley.render.mesh.Mesh;
 import g5.changvalley.render.mesh.Uniform;
+import g5.changvalley.render.mesh.uniforms.*;
 import org.joml.Matrix4f;
 import org.joml.Vector3f;
 
@@ -20,14 +21,14 @@ public class Renderer {
 
     public static void construct() {
         // make projection matrix and add it to a uniform
-        Uniform.makeUniform("projectionMatrix", Renderer.updateProjectionMatrix());
+        Uniform.makeUniform("projectionMatrix", MatrixUniform.from(Renderer.updateProjectionMatrix()));
         // doesn't rlly matter what the world matrix starts off as so for now lets make it not change the object
-        Uniform.makeUniform("modelViewMatrix", modelViewMatrix.identity());
-        Uniform.makeUniform("textureSampler", 0);
+        Uniform.makeUniform("modelViewMatrix", MatrixUniform.from(modelViewMatrix.identity()));
+        Uniform.makeUniform("textureSampler", IntUniform.from(0));
     }
 
     public static void render(GameObject gameObject) {
-        Uniform.updateUniform("modelViewMatrix", updateModelViewMatrix(gameObject.getPosition(), gameObject.getRotation(), gameObject.getScale()));
+        Uniform.updateUniform("modelViewMatrix", MatrixUniform.from(updateModelViewMatrix(gameObject.getPosition(), gameObject.getRotation(), gameObject.getScale())));
         gameObject.getMesh().render();
     }
 

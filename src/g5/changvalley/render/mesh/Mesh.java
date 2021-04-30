@@ -5,6 +5,8 @@ import com.mokiat.data.front.parser.IOBJParser;
 import com.mokiat.data.front.parser.OBJModel;
 import g5.changvalley.Utils;
 import g5.changvalley.render.Renderer;
+import org.joml.Vector3f;
+import org.joml.Vector4f;
 import org.lwjgl.system.MemoryUtil;
 
 import java.io.ByteArrayInputStream;
@@ -24,13 +26,15 @@ import com.mokiat.data.front.parser.OBJParser;
 // sorry reid sama
 // UPDATE i tried to learn how to do this for fun and tbh kinda works hopefully??
 public class Mesh {
-    // vertex array object id
-    private final int vao = glGenVertexArrays();
     private final static int POSITION_INDEX = 0;
     private final static int TEXTURE_INDEX = 1;
     private final static int NORMAL_INDEX = 2;
-    private Texture texture = null;
+
+    // vertex array object id
+    private final int vao = glGenVertexArrays();
     private final int vertexCount;
+    private final Vector4f color = new Vector4f(0, 0, 0, 0);
+    private Texture texture = null;
 
     public Mesh(float[] vertices, float[] normals, int[] indexes) {
         vertexCount = indexes.length;
@@ -50,6 +54,14 @@ public class Mesh {
         bindVertex();
         VertexBufferObject.attachAttributeVbo(textureCoordinates, TEXTURE_INDEX, 2);
         Mesh.unbindVertex();
+    }
+
+    public boolean hasTexture() {
+        return texture != null;
+    }
+
+    public void setColor(float r, float g, float b, float a) {
+        color.set(r, g, b, a);
     }
 
     public void bindVertex() {
