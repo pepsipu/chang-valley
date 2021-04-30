@@ -2,6 +2,7 @@ package g5.changvalley.engine;
 
 import g5.changvalley.render.mesh.Mesh;
 import org.joml.Vector3f;
+import org.joml.Vector4f;
 
 public class GameObject {
     private final Mesh mesh;
@@ -55,5 +56,9 @@ public class GameObject {
 
     public Mesh getMesh() {
         return mesh;
+    }
+
+    public Vector4f getColor() {
+        return mesh.getColor();
     }
 }

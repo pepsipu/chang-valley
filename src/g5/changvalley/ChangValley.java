@@ -54,6 +54,9 @@ public class ChangValley {
     // game loop, following the fixed timestep game loop paradigm
     private static void loop() {
         double accumulator = 0;
+        float x = 0;
+        float y = 0;
+        float z = 0;
         // user & external input, update state, render scene cycle
         while (running && !Window.shouldClose()) {
             // collect input here
@@ -63,11 +66,15 @@ public class ChangValley {
             accumulator += Timer.getDelta();
             while (accumulator >= INTERVAL) {
                 // do interval updates here
+                x += .02f;
+                y += .03f;
+                z += .01f;
                 float rotation = s.getRotation().z + 0.02f;
                 if (rotation > Math.PI * 2) {
                     rotation = 0;
                 }
                 s.setRotation(rotation, rotation, rotation);
+                s.getMesh().setColor((float) Math.sin(x), (float) Math.sin(y), (float) Math.sin(z), 1);
                 Engine.updateState();
                 accumulator -= INTERVAL;
             }
@@ -175,6 +182,7 @@ public class ChangValley {
         Texture t = new Texture("./grassblock.png");
         Mesh m = new Mesh(positions, positions, indexes);
         m.setTexture(t, textureIndexes);
+        m.setColor(1, 1, 1, 1);
         s = new GameObject(m);
         s.setPosition(0, 0, -2f);
         loop();

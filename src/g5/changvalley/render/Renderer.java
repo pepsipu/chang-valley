@@ -2,11 +2,10 @@ package g5.changvalley.render;
 
 import g5.changvalley.Window;
 import g5.changvalley.engine.GameObject;
-import g5.changvalley.render.mesh.Mesh;
 import g5.changvalley.render.mesh.Uniform;
-import g5.changvalley.render.mesh.uniforms.*;
 import org.joml.Matrix4f;
 import org.joml.Vector3f;
+import org.joml.Vector4f;
 
 import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.opengl.GL33.*;
@@ -21,14 +20,18 @@ public class Renderer {
 
     public static void construct() {
         // make projection matrix and add it to a uniform
-        Uniform.makeUniform("projectionMatrix", MatrixUniform.from(Renderer.updateProjectionMatrix()));
+        Uniform.makeUniform("projectionMatrix", Renderer.updateProjectionMatrix());
         // doesn't rlly matter what the world matrix starts off as so for now lets make it not change the object
-        Uniform.makeUniform("modelViewMatrix", MatrixUniform.from(modelViewMatrix.identity()));
-        Uniform.makeUniform("textureSampler", IntUniform.from(0));
+        Uniform.makeUniform("modelViewMatrix", modelViewMatrix.identity());
+        Uniform.makeUniform("textureSampler", 0);
+        Uniform.makeUniform("color", new Vector4f(.5f, .5f, .5f, 1));
+
     }
 
     public static void render(GameObject gameObject) {
-        Uniform.updateUniform("modelViewMatrix", MatrixUniform.from(updateModelViewMatrix(gameObject.getPosition(), gameObject.getRotation(), gameObject.getScale())));
+        Matrix4f modelMatrix = updateModelViewMatrix(gameObject.getPosition(), gameObject.getRotation(), gameObject.getScale());
+        Uniform.updateUniform("modelViewMatrix", modelMatrix);
+        Uniform.updateUniform("color", gameObject.getColor());
         gameObject.getMesh().render();
     }
 

@@ -33,7 +33,8 @@ public class Mesh {
     // vertex array object id
     private final int vao = glGenVertexArrays();
     private final int vertexCount;
-    private final Vector4f color = new Vector4f(0, 0, 0, 0);
+    // will act like a unit vector and wont change the texture
+    private final Vector4f color = new Vector4f(1, 1, 1, 1);
     private Texture texture = null;
 
     public Mesh(float[] vertices, float[] normals, int[] indexes) {
@@ -102,6 +103,10 @@ public class Mesh {
         glDisableVertexAttribArray(Mesh.POSITION_INDEX);
         glDisableVertexAttribArray(Mesh.TEXTURE_INDEX);
         glDisableVertexAttribArray(Mesh.NORMAL_INDEX);
+    }
+
+    public Vector4f getColor() {
+        return color;
     }
 
 //    public static Mesh fromFile(String filename) {
