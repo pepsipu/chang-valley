@@ -74,7 +74,7 @@ public class ChangValley {
                     rotation = 0;
                 }
                 s.setRotation(rotation, rotation, rotation);
-                s.getMesh().setColor((float) Math.sin(x), (float) Math.sin(y), (float) Math.sin(z), 1);
+                s.getMesh().setColor((float) (Math.sin(x) + 2) / 3, (float) (Math.sin(y) + 2) / 3, (float) (Math.sin(z) + 2) / 3, .5f);
                 Engine.updateState();
                 accumulator -= INTERVAL;
             }
@@ -181,7 +181,7 @@ public class ChangValley {
         };
         Texture t = new Texture("./grassblock.png");
         Mesh m = new Mesh(positions, positions, indexes);
-        m.setTexture(t, textureIndexes);
+//        m.setTexture(t, textureIndexes);
         m.setColor(1, 1, 1, 1);
         s = new GameObject(m);
         s.setPosition(0, 0, -2f);

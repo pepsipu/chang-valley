@@ -1,21 +1,8 @@
 package g5.changvalley.render.mesh;
 
-import com.mokiat.data.front.error.WFException;
-import com.mokiat.data.front.parser.IOBJParser;
-import com.mokiat.data.front.parser.OBJModel;
-import g5.changvalley.Utils;
-import g5.changvalley.render.Renderer;
-import org.joml.Vector3f;
 import org.joml.Vector4f;
-import org.lwjgl.system.MemoryUtil;
-
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.nio.FloatBuffer;
 
 import static org.lwjgl.opengl.GL33.*;
-
-import com.mokiat.data.front.parser.OBJParser;
 
 // constructing a mesh should load the vertices into GPU memory. would be nice to have complete wrappers around opengl
 // operations like binding/loading but not necessary.
@@ -26,9 +13,9 @@ import com.mokiat.data.front.parser.OBJParser;
 // sorry reid sama
 // UPDATE i tried to learn how to do this for fun and tbh kinda works hopefully??
 public class Mesh {
-    private final static int POSITION_INDEX = 0;
-    private final static int TEXTURE_INDEX = 1;
-    private final static int NORMAL_INDEX = 2;
+    public final static int POSITION_INDEX = 0;
+    public final static int TEXTURE_INDEX = 1;
+    public final static int NORMAL_INDEX = 2;
 
     // vertex array object id
     private final int vao = glGenVertexArrays();
@@ -57,10 +44,6 @@ public class Mesh {
         Mesh.unbindVertex();
     }
 
-    public boolean hasTexture() {
-        return texture != null;
-    }
-
     public void setColor(float r, float g, float b, float a) {
         color.set(r, g, b, a);
     }
@@ -84,8 +67,8 @@ public class Mesh {
 
     public void render() {
         bindVertex();
-        bindTexture();
-        Mesh.enableAttributes();
+        if (texture != null) bindTexture();
+        enableAttributes();
 
         draw();
 
@@ -93,9 +76,9 @@ public class Mesh {
         Mesh.unbindVertex();
     }
 
-    public static void enableAttributes() {
+    public void enableAttributes() {
         glEnableVertexAttribArray(Mesh.POSITION_INDEX);
-        glEnableVertexAttribArray(Mesh.TEXTURE_INDEX);
+        if (texture != null) glEnableVertexAttribArray(Mesh.TEXTURE_INDEX);
         glEnableVertexAttribArray(Mesh.NORMAL_INDEX);
     }
 

@@ -2,6 +2,7 @@ package g5.changvalley.render;
 
 import g5.changvalley.Window;
 import g5.changvalley.engine.GameObject;
+import g5.changvalley.render.mesh.Mesh;
 import g5.changvalley.render.mesh.Uniform;
 import org.joml.Matrix4f;
 import org.joml.Vector3f;
@@ -25,7 +26,8 @@ public class Renderer {
         Uniform.makeUniform("modelViewMatrix", modelViewMatrix.identity());
         Uniform.makeUniform("textureSampler", 0);
         Uniform.makeUniform("color", new Vector4f(.5f, .5f, .5f, 1));
-
+        glVertexAttrib2f(Mesh.TEXTURE_INDEX, -1, -1);
+        glDisableVertexAttribArray(Mesh.TEXTURE_INDEX);
     }
 
     public static void render(GameObject gameObject) {
