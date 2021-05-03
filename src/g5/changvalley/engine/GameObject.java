@@ -26,10 +26,6 @@ public class GameObject {
         return scale;
     }
 
-    public Vector3f setPosition() {
-        return position;
-    }
-
     public void setPosition(float x, float y, float z) {
         position.x = x;
         position.y = y;

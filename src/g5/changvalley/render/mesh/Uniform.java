@@ -40,6 +40,8 @@ public class Uniform {
             updateUniform(name, (Integer) value);
         } else if (value instanceof Vector4f) {
             updateUniform(name, (Vector4f) value);
+        } else if (value instanceof Boolean) {
+            updateUniform(name, (Boolean) value);
         } else {
             throw new RuntimeException("weird uniform type what");
         }
@@ -65,5 +67,9 @@ public class Uniform {
             // update matrix in gpu
             glUniform4fv(uniforms.get(name), fb);
         }
+    }
+
+    public static void updateUniform(String name, boolean state) {
+        glUniform1i(uniforms.get(name), state ? 1 : 0);
     }
 }

@@ -26,14 +26,13 @@ public class Renderer {
         Uniform.makeUniform("modelViewMatrix", modelViewMatrix.identity());
         Uniform.makeUniform("textureSampler", 0);
         Uniform.makeUniform("color", new Vector4f(.5f, .5f, .5f, 1));
-        glVertexAttrib2f(Mesh.TEXTURE_INDEX, -1, -1);
-        glDisableVertexAttribArray(Mesh.TEXTURE_INDEX);
     }
 
     public static void render(GameObject gameObject) {
         Matrix4f modelMatrix = updateModelViewMatrix(gameObject.getPosition(), gameObject.getRotation(), gameObject.getScale());
         Uniform.updateUniform("modelViewMatrix", modelMatrix);
         Uniform.updateUniform("color", gameObject.getColor());
+
         gameObject.getMesh().render();
     }
 

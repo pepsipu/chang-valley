@@ -9,9 +9,5 @@ uniform vec4 color;
 // fragment shader for ~colors~
 void main()
 {
-    if (outTextureIndex.x == -1) {
-        fragColor = color;
-    } else {
-        fragColor = texture(textureSampler, outTextureIndex) * color;
-    }
+    fragColor = texture(textureSampler, outTextureIndex) * color;
 }
