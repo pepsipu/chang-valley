@@ -5,7 +5,7 @@ import org.joml.Vector3f;
 import org.joml.Vector4f;
 
 public class GameObject {
-    private final Mesh mesh;
+    private Mesh mesh;
     private final Vector3f position = new Vector3f(0, 0, 0);
     private final Vector3f rotation = new Vector3f(0, 0, 0);
     private final Vector3f scale = new Vector3f(1, 1, 1);
@@ -32,6 +32,10 @@ public class GameObject {
         position.z = z;
     }
 
+    public void setPosition(Vector3f newPos) {
+        position.set(newPos);
+    }
+
     public void setRotation(float x, float y, float z) {
         rotation.x = x;
         rotation.y = y;
@@ -52,6 +56,10 @@ public class GameObject {
 
     public Mesh getMesh() {
         return mesh;
+    }
+
+    public void setMesh(Mesh mesh) {
+        this.mesh = mesh;
     }
 
     public Vector4f getColor() {

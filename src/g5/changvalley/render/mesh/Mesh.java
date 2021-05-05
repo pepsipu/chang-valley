@@ -20,9 +20,9 @@ import static org.lwjgl.opengl.GL33.*;
 // sorry reid sama
 // UPDATE i tried to learn how to do this for fun and tbh kinda works hopefully??
 public class Mesh {
-    private final static int POSITION_INDEX = 0;
-    private final static int TEXTURE_INDEX = 1;
-    private final static int NORMAL_INDEX = 2;
+    public final static int POSITION_INDEX = 0;
+    public final static int TEXTURE_INDEX = 1;
+    public final static int NORMAL_INDEX = 2;
     private final static Texture DEFAULT_TEXTURE = new Texture("white.png");
 
     // vertex array object id
@@ -30,15 +30,15 @@ public class Mesh {
     private int vertexCount = 0;
     // will act like a unit vector and wont change the texture
     private final Vector4f color = new Vector4f(1, 1, 1, 1);
-    private Texture texture = DEFAULT_TEXTURE;
+    private Texture texture = null;
 
-    public Mesh(float[] vertices, float[] normals, int[] indexes) {
+    public Mesh(float[] vertices, float[] normals, int[] indexes, float[] textureCoords) {
         vertexCount = indexes.length;
         bindVertex();
 
         // attach vertex vbo to this vao
         VertexBufferObject.attachAttributeVbo(vertices, POSITION_INDEX, 3);
-        VertexBufferObject.attachAttributeVbo(vertices, TEXTURE_INDEX, 2);
+        VertexBufferObject.attachAttributeVbo(textureCoords, TEXTURE_INDEX, 2);
         // attach texture index vbo to this vao
         VertexBufferObject.attachAttributeVbo(normals, NORMAL_INDEX, 3);
         VertexBufferObject.attachIndexVbo(indexes);
@@ -73,8 +73,8 @@ public class Mesh {
 
     public void render() {
         bindVertex();
-        bindTexture();
-        Mesh.enableAttributes();
+        if (texture != null) bindTexture();
+        enableAttributes();
 
         draw();
 
@@ -82,9 +82,9 @@ public class Mesh {
         Mesh.unbindVertex();
     }
 
-    public static void enableAttributes() {
+    public void enableAttributes() {
         glEnableVertexAttribArray(Mesh.POSITION_INDEX);
-        glEnableVertexAttribArray(Mesh.TEXTURE_INDEX);
+        if (texture != null) glEnableVertexAttribArray(Mesh.TEXTURE_INDEX);
         glEnableVertexAttribArray(Mesh.NORMAL_INDEX);
     }
 
@@ -126,23 +126,34 @@ public class Mesh {
         }
 
         List<Integer> indicesList = new ArrayList<Integer>();
+        List<OBJTexCoord> textList = model.getTexCoords();
+        List<Float> textExpandedList = new ArrayList<Float>();
         OBJMesh readMesh = model.getObjects().get(0).getMeshes().get(0);
+        boolean hasTexture = true;
         for (OBJFace face: readMesh.getFaces()) {
             for (OBJDataReference reference: face.getReferences()) {
                 indicesList.add(reference.vertexIndex);
+                if (!reference.hasTexCoordIndex()) {
+                    hasTexture = false;
+                } else {
+                    OBJTexCoord texCoordinate = textList.get(reference.texCoordIndex);
+                    textExpandedList.add(texCoordinate.u);
+                    textExpandedList.add(1 - texCoordinate.v);
+                }
             }
         }
         // lol ty stack overflow
         int[] indices = indicesList.stream().mapToInt(i -> i).toArray();
+        // doesnt matter what this is as long as its the length of vertices
+        float[] textureCoordinates = vertices;
+        if (hasTexture) {
+            textureCoordinates = new float[textExpandedList.size()];
+            int i = 0;
+            for (Float f: textExpandedList) {
+                textureCoordinates[i++] = f;
+            }
+        }
 
-//        List<OBJTexCoord> textList = model.getTexCoords();
-//        float[] textureCoords = new float[textList.size() * 2];
-//        for (int i = 0; i < textList.size(); i++) {
-//            OBJTexCoord textureCoordinate = textList.get(i);
-//            textureCoords[i * 2] = textureCoordinate.u;
-//            textureCoords[i * 2 + 1] = textureCoordinate.v;
-//        }
-
-        return new Mesh(vertices, normals, indices);
+        return new Mesh(vertices, normals, indices, textureCoordinates);
     }
 }

@@ -42,6 +42,8 @@ public class Uniform {
             updateUniform(name, (Vector4f) value);
         } else if (value instanceof Boolean) {
             updateUniform(name, (Boolean) value);
+        } else if (value instanceof Float) {
+            updateUniform(name, (Float) value);
         } else {
             throw new RuntimeException("weird uniform type what");
         }
@@ -71,5 +73,9 @@ public class Uniform {
 
     public static void updateUniform(String name, boolean state) {
         glUniform1i(uniforms.get(name), state ? 1 : 0);
+    }
+
+    public static void updateUniform(String name, float value) {
+        glUniform1f(uniforms.get(name), value);
     }
 }

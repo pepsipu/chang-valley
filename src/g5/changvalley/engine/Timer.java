@@ -1,6 +1,6 @@
 package g5.changvalley.engine;
 
-import g5.changvalley.ChangValley;
+import g5.changvalley.Registrar;
 import org.lwjgl.glfw.GLFW;
 
 // suuuper basic timer, but to keep fixed time step loops we need to get the time delta
@@ -21,7 +21,7 @@ public class Timer {
 
     // wait until frame should complete
     public static void sync() {
-        double wait =  lastTime + ChangValley.INTERVAL;
+        double wait =  lastTime + Registrar.INTERVAL;
         while (getTime() < wait) {
             // spin waiting is a lot better than time stepping 1ms or busy waiting
             Thread.onSpinWait();

@@ -5,6 +5,7 @@ layout (location=1) in vec2 textureIndex;
 
 uniform mat4 projectionMatrix;
 uniform mat4 modelViewMatrix;
+uniform vec4 sphereOffset;
 
 out vec2 outTextureIndex;
 // vertex shader to project 3d space onto 2d space
