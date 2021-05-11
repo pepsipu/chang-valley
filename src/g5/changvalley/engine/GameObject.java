@@ -58,11 +58,17 @@ public class GameObject {
         return mesh;
     }
 
+    public void render() { mesh.render(); }
+
     public void setMesh(Mesh mesh) {
         this.mesh = mesh;
     }
 
     public Vector4f getColor() {
         return mesh.getColor();
+    }
+
+    public void to(GameObject other) {
+        position.set(other.position);
     }
 }

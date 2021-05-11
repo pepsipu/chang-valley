@@ -26,6 +26,7 @@ public class Renderer {
         Uniform.makeUniform("modelViewMatrix", modelViewMatrix.identity());
         Uniform.makeUniform("textureSampler", 0);
         Uniform.makeUniform("color", new Vector4f(.5f, .5f, .5f, 1));
+        Uniform.makeUniform("dither", false);
 
         glVertexAttrib2f(Mesh.TEXTURE_INDEX, -1, -1);
         glDisableVertexAttribArray(Mesh.TEXTURE_INDEX);
@@ -35,8 +36,9 @@ public class Renderer {
         Matrix4f modelMatrix = updateModelViewMatrix(gameObject.getPosition(), gameObject.getRotation(), gameObject.getScale());
         Uniform.updateUniform("modelViewMatrix", modelMatrix);
         Uniform.updateUniform("color", gameObject.getColor());
+        Uniform.makeUniform("dither", gameObject.getMesh().isDithered());
 
-        gameObject.getMesh().render();
+        gameObject.render();
     }
 
     public static Matrix4f updateModelViewMatrix(Vector3f translation, Vector3f rotation, Vector3f scale) {

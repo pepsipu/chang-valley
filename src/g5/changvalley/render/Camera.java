@@ -1,5 +1,6 @@
 package g5.changvalley.render;
 
+import g5.changvalley.engine.GameObject;
 import org.joml.Matrix4f;
 import org.joml.Vector3f;
 
@@ -22,8 +23,8 @@ public class Camera {
 
     public static Matrix4f getViewMatrix() {
         return viewMatrix
-                .rotation(rotation.x, X_POLE)
-                .rotate(rotation.y, Y_POLE)
+                .rotation(rotation.x, Y_POLE)
+                .rotate(rotation.y, X_POLE)
                 .translate(-position.x, -position.y, -position.z);
     }
 
@@ -32,5 +33,12 @@ public class Camera {
     }
     public static void addRotation(Vector3f offset) {
         rotation.add(offset);
+    }
+
+    public static void lookAt(GameObject gameObject) {
+        Vector3f gameObjectPosition = gameObject.getPosition();
+//        float d = (float) Math.atan2(gameObjectPosition.y - position.y, gameObjectPosition.x - position.x);
+//        System.out.println(d);
+//        rotation.set(0, .2, 0);
     }
 }

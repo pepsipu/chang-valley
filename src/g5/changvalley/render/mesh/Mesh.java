@@ -25,9 +25,16 @@ public class Mesh {
     public final static int NORMAL_INDEX = 2;
     private final static Texture DEFAULT_TEXTURE = new Texture("white.png");
 
+    private final int vertexVbo;
+    private final int textureVbo;
+    private final int normalVbo;
+    private final int idxVbo;
+
+    private boolean dither = true;
+
     // vertex array object id
     private final int vao = glGenVertexArrays();
-    private int vertexCount = 0;
+    private final int vertexCount;
     // will act like a unit vector and wont change the texture
     private final Vector4f color = new Vector4f(1, 1, 1, 1);
     private Texture texture = null;
@@ -37,11 +44,11 @@ public class Mesh {
         bindVertex();
 
         // attach vertex vbo to this vao
-        VertexBufferObject.attachAttributeVbo(vertices, POSITION_INDEX, 3);
-        VertexBufferObject.attachAttributeVbo(textureCoords, TEXTURE_INDEX, 2);
+        vertexVbo = VertexBufferObject.attachAttributeVbo(vertices, POSITION_INDEX, 3);
+        textureVbo = VertexBufferObject.attachAttributeVbo(textureCoords, TEXTURE_INDEX, 2);
         // attach texture index vbo to this vao
-        VertexBufferObject.attachAttributeVbo(normals, NORMAL_INDEX, 3);
-        VertexBufferObject.attachIndexVbo(indexes);
+        normalVbo = VertexBufferObject.attachAttributeVbo(normals, NORMAL_INDEX, 3);
+        idxVbo = VertexBufferObject.attachIndexVbo(indexes);
 
         Mesh.unbindVertex();
     }
@@ -60,6 +67,14 @@ public class Mesh {
 
     public static void unbindVertex() {
         glBindVertexArray(0);
+    }
+
+    public void setDithering(boolean dither) {
+        this.dither = dither;
+    }
+
+    public boolean isDithered() {
+        return dither;
     }
 
     public void bindTexture() {
@@ -125,9 +140,9 @@ public class Mesh {
             normals[i * 3 + 2] = normal.z;
         }
 
-        List<Integer> indicesList = new ArrayList<Integer>();
+        List<Integer> indicesList = new ArrayList<>();
         List<OBJTexCoord> textList = model.getTexCoords();
-        List<Float> textExpandedList = new ArrayList<Float>();
+        List<Float> textExpandedList = new ArrayList<>();
         OBJMesh readMesh = model.getObjects().get(0).getMeshes().get(0);
         boolean hasTexture = true;
         for (OBJFace face: readMesh.getFaces()) {
@@ -155,5 +170,18 @@ public class Mesh {
         }
 
         return new Mesh(vertices, normals, indices, textureCoordinates);
+    }
+
+    public void destruct() {
+        glDisableVertexAttribArray(0);
+
+        VertexBufferObject.unbind();
+        VertexBufferObject.delete(vertexVbo);
+        VertexBufferObject.delete(textureVbo);
+        VertexBufferObject.delete(normalVbo);
+        VertexBufferObject.delete(idxVbo);
+
+        unbindVertex();
+        glDeleteVertexArrays(vao);
     }
 }
