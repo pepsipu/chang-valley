@@ -14,6 +14,6 @@ public class Particle extends GameObject {
     public Particle() {
         super(mesh);
         mesh.setDithering(false);
-        setScale(.2f);
+        scale.set(.2f);
     }
 }

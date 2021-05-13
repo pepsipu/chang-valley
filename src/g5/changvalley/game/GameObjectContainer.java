@@ -23,7 +23,7 @@ public class GameObjectContainer {
         list.addAll(Arrays.asList(getGameObjects()));
     }
 
-    public void on(RunnableGameObject runnable) {
+    public void forEach(RunnableGameObject runnable) {
         for (GameObject gameObject: gameObjects) {
             runnable.run(gameObject);
         }

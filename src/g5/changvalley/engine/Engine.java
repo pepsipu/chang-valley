@@ -10,4 +10,6 @@ public interface Engine {
     ArrayList<GameObject> render();
 
     void construct();
+
+    void finalUpdate();
 }

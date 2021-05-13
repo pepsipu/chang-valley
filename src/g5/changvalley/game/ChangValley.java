@@ -2,8 +2,6 @@ package g5.changvalley.game;
 import g5.changvalley.Registrar;
 import g5.changvalley.engine.Engine;
 import g5.changvalley.engine.GameObject;
-import g5.changvalley.engine.Particle;
-import g5.changvalley.render.Camera;
 import org.lwjgl.Version;
 
 import java.util.ArrayList;
@@ -19,7 +17,7 @@ public class ChangValley implements Engine {
     }
 
     public void takeInput() {
-
+        player.updateDirectionalVector();
     }
 
     public void updateState() {
@@ -32,10 +30,16 @@ public class ChangValley implements Engine {
 
     public void construct() {
         player = new Player();
-        player.on((g) -> g.setPosition(0, 0, -9f));
+        player.forEach((g) -> {
+            g.position.set(0, 0, 3f);
+        });
         player.addTo(gameObjects);
-        Particle particle = new Particle();
-        particle.setPosition(0, -3, -9f);
-        gameObjects.add(particle);
+//        Particle p = new Particle();
+//        p.setPosition(0, -3f, -9f);
+//        gameObjects.add(p);
+    }
+
+    public void finalUpdate() {
+        player.finalTransforms();
     }
 }

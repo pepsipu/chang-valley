@@ -64,6 +64,7 @@ public class Registrar {
                 engine.updateState();
                 accumulator -= INTERVAL;
             }
+            engine.finalUpdate();
             // render here
             Renderer.clear();
             for (GameObject gameObject: engine.render()) {

@@ -5,6 +5,7 @@ import g5.changvalley.engine.GameObject;
 import g5.changvalley.render.mesh.Mesh;
 import g5.changvalley.render.mesh.Uniform;
 import org.joml.Matrix4f;
+import org.joml.Quaternionf;
 import org.joml.Vector3f;
 import org.joml.Vector4f;
 
@@ -33,7 +34,7 @@ public class Renderer {
     }
 
     public static void render(GameObject gameObject) {
-        Matrix4f modelMatrix = updateModelViewMatrix(gameObject.getPosition(), gameObject.getRotation(), gameObject.getScale());
+        Matrix4f modelMatrix = updateModelViewMatrix(gameObject.position, gameObject.orientation, gameObject.scale);
         Uniform.updateUniform("modelViewMatrix", modelMatrix);
         Uniform.updateUniform("color", gameObject.getColor());
         Uniform.makeUniform("dither", gameObject.getMesh().isDithered());
@@ -41,13 +42,11 @@ public class Renderer {
         gameObject.render();
     }
 
-    public static Matrix4f updateModelViewMatrix(Vector3f translation, Vector3f rotation, Vector3f scale) {
+    public static Matrix4f updateModelViewMatrix(Vector3f translation, Quaternionf rotation, Vector3f scale) {
         return new Matrix4f(Camera.getViewMatrix())
                 .mul(modelViewMatrix
                         .translation(translation)
-                        .rotateX(rotation.x)
-                        .rotateY(rotation.y)
-                        .rotateZ(rotation.z)
+                        .rotate(rotation)
                         .scale(scale));
     }
 

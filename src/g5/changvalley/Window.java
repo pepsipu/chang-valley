@@ -3,7 +3,6 @@ package g5.changvalley;
 // bad style but
 // *dont* *care*
 
-import org.lwjgl.glfw.GLFWVidMode;
 import org.lwjgl.opengl.GL;
 import org.lwjgl.system.MemoryStack;
 
@@ -26,7 +25,7 @@ public class Window {
         glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
         glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
         glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GLFW_TRUE);
-        window = glfwCreateWindow(500, 500, "Chang Valley", 0, 0);
+        window = glfwCreateWindow(600, 400, "Chang Valley", 0, 0);
         if (window == 0) {
             throw new RuntimeException("could not make window :(");
         }
@@ -59,6 +58,11 @@ public class Window {
 
     public static boolean isPressed(int keyCode) {
         return glfwGetKey(window, keyCode) == GLFW_PRESS;
+    }
+
+    // useful for math
+    public static int pressValue(int keyCode) {
+        return glfwGetKey(window, keyCode);
     }
 
     public static boolean shouldClose() {
