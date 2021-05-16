@@ -14,7 +14,7 @@ import static org.lwjgl.glfw.GLFW.*;
 // main game class, run constructors, run the game loop, run destructors cuz memory leaks L
 // evan chang for president 2023
 public class Registrar {
-    private static boolean running = true;
+    public static boolean running = true;
     private static Engine engine;
     // 60 updates a second is good
     public static final double INTERVAL = 1d / 60d;
@@ -27,6 +27,7 @@ public class Registrar {
         }
         // we can make these static blocks, but i prefer a more explicit and pragmatic construction/destruction
         // so we can control when we want to setup the window VS just in time construction
+        // important for glfw construction
         Window.construct();
         ShaderManager.construct();
         Renderer.construct();
@@ -34,6 +35,8 @@ public class Registrar {
     }
 
     private static void destruct() {
+        running = false;
+
         // kill window
         Window.destruct();
         ShaderManager.destruct();
@@ -41,7 +44,6 @@ public class Registrar {
 
         // freeing the err callback should *never* cause a npe, but dont want errs coming from lwjgl codebase
         Objects.requireNonNull(glfwSetErrorCallback(null)).free();
-
         System.out.println("thx for playing :D");
     }
 
@@ -64,7 +66,6 @@ public class Registrar {
                 engine.updateState();
                 accumulator -= INTERVAL;
             }
-            engine.finalUpdate();
             // render here
             Renderer.clear();
             for (GameObject gameObject: engine.render()) {

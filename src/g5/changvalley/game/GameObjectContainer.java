@@ -5,13 +5,9 @@ import g5.changvalley.engine.GameObject;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-interface RunnableGameObject {
-    void run(GameObject gameObject);
-}
-
 public class GameObjectContainer {
-    private final GameObject[] gameObjects;
-    GameObjectContainer(GameObject ...gameObjects) {
+    public final GameObject[] gameObjects;
+    public GameObjectContainer(GameObject ...gameObjects) {
         this.gameObjects = gameObjects;
     }
 
