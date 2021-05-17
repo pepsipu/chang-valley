@@ -21,6 +21,7 @@ public class Server implements IServer {
     public UUID addNewPlayer() throws RemoteException {
         UUID uuid = UUID.randomUUID();
         players.put(uuid, new PlayerState());
+        System.out.println("joined: " + uuid);
         return uuid;
     }
 
@@ -34,10 +35,18 @@ public class Server implements IServer {
     }
 
     public void removeIdlePlayers() {
+//        System.out.println(players);
+        // iterator invalidation if we remove during entrySet
+        // thanks kmh! your chall for angstromctf helped me catch this here and on the ap test ;)
+        ArrayList<UUID> toRemove = new ArrayList<>();
         for (Map.Entry<UUID, PlayerState> player: players.entrySet()) {
             if (!player.getValue().hasHeartbeat()) {
-
+                toRemove.add(player.getKey());
+                System.out.println("removed: " + player.getKey());
             }
+        }
+        for (UUID remove: toRemove) {
+            players.remove(remove);
         }
     }
 }

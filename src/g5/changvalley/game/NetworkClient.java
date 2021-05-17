@@ -5,6 +5,7 @@ import java.rmi.registry.Registry;
 import java.util.*;
 
 import g5.Constants;
+import g5.changvalley.Registrar;
 import g5.changvalley.game.objects.Player;
 import g5.server.IServer;
 import g5.server.PlayerState;

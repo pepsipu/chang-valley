@@ -10,6 +10,7 @@ import g5.changvalley.game.objects.Terrain;
 import g5.changvalley.render.Camera;
 import g5.server.PlayerState;
 import org.lwjgl.Version;
+
 import static org.lwjgl.glfw.GLFW.*;
 
 
@@ -21,6 +22,8 @@ import java.util.UUID;
 public class ChangValley implements Engine {
     private final ArrayList<GameObject> gameObjects = new ArrayList<>();
     private final Map<UUID, Player> remotePlayers = new HashMap<>();
+    // prevent duplicates from being added from cross thread addition
+    // so i made it a hashmap instead of a list
     private final Map<UUID, Runnable> renderQueue = new HashMap<>();
     private int panDirection;
     private Player player;
@@ -35,6 +38,7 @@ public class ChangValley implements Engine {
             System.err.println("Client exception: " + e.toString());
             e.printStackTrace();
         }
+        System.out.println("Welcome, " + NetworkClient.getUuid() + "!");
         Registrar.registerGame(new ChangValley());
     }
 
@@ -46,19 +50,30 @@ public class ChangValley implements Engine {
     public void updateState() {
         Camera.orientation.rotateY(panDirection / 32f);
         player.updateState();
-        for (Player remotePlayer: remotePlayers.values()) {
+        for (Player remotePlayer : remotePlayers.values()) {
             remotePlayer.updateState();
         }
         terrain.update();
     }
 
     public ArrayList<GameObject> render() {
+        // per render calls
         terrain.regenerate();
-        for (Map.Entry<UUID, Runnable> runnable: renderQueue.entrySet()) {
+        for (Map.Entry<UUID, Runnable> runnable : renderQueue.entrySet()) {
             runnable.getValue().run();
             renderQueue.remove(runnable.getKey());
         }
-        return gameObjects;
+
+        // this is horrible, horrible, horrible, but ok idc lol
+        // we should actually provide a hashmap for gameobjects with specific uids for each container, or really
+        // just an array of containers
+        // the project is due in like 2 days tho so i dont really want to go back and restructure everything LOL
+        ArrayList<GameObject> renderThisFrame = new ArrayList<>(gameObjects);
+        player.addTo(renderThisFrame);
+        for (Player remotePlayer : remotePlayers.values()) {
+            remotePlayer.addTo(renderThisFrame);
+        }
+        return renderThisFrame;
     }
 
     public void construct() {
@@ -70,7 +85,7 @@ public class ChangValley implements Engine {
             g.position.set(0, 0, 3f);
             g.orientation.rotateY((float) (Math.PI));
         });
-        player.addTo(gameObjects);
+//        player.addTo(gameObjects);
 
         terrain = Terrain.makeTerrain();
         terrain.position.set(-Terrain.TERRAIN_SIZE / 2f, 3f, Terrain.TERRAIN_SIZE / 2f);
@@ -83,19 +98,22 @@ public class ChangValley implements Engine {
         (new Thread(() -> {
             while (Registrar.running) {
                 NetworkClient.update(player);
+                Thread.onSpinWait();
             }
         })).start();
 
         (new Thread(() -> {
             while (Registrar.running) {
                 updateRemotePlayers();
+                Thread.onSpinWait();
             }
         })).start();
     }
 
     public void updateRemotePlayers() {
         try {
-            for (Map.Entry<UUID, PlayerState> pState: NetworkClient.getRemotePlayers().entrySet()) {
+            Map<UUID, PlayerState> newRemotePlayers = NetworkClient.getRemotePlayers();
+            for (Map.Entry<UUID, PlayerState> pState : newRemotePlayers.entrySet()) {
                 UUID remoteUuid = pState.getKey();
                 // dont make a player for ourselves
                 if (remoteUuid.equals(NetworkClient.getUuid())) {
@@ -105,13 +123,19 @@ public class ChangValley implements Engine {
                     renderQueue.put(remoteUuid, () -> {
                         Player player = new Player();
                         remotePlayers.put(remoteUuid, player);
-                        player.addTo(gameObjects);
+//                        player.addTo(gameObjects);
                     });
                 } else {
                     Player player = remotePlayers.get(remoteUuid);
                     PlayerState state = pState.getValue();
                     player.setPosition(state.getPosition());
                     player.setOrientation(state.getOrientation());
+                }
+            }
+            // bad but no one cares
+            for (UUID player: remotePlayers.keySet()) {
+                if (!newRemotePlayers.containsKey(player)) {
+                    remotePlayers.remove(player);
                 }
             }
         } catch (Exception e) {
